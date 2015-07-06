@@ -82,7 +82,9 @@ handle_message({Ref, {error, Reason}},
                {closed,  true} -> {shutdown, CloseReason};
                {closed, false} -> socket_closed_unexpectedly;
                {_,          _} -> {socket_error, Reason}
-           end, State}.
+           end, State};
+handle_message({'EXIT', _, shutdown}, State) ->
+    {stop, shutdown, State}.
 
 closing(_ChannelCloseType, Reason, State) ->
     {ok, State#state{closing_reason = Reason}}.
