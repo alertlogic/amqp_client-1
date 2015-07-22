@@ -155,7 +155,7 @@ init({TypeSup, AMQPParams}) ->
     %% Trapping exits since we need to make sure that the `terminate/2' is
     %% called in the case of direct connection (it does not matter for a network
     %% connection).  See bug25116.
-    process_flag(trap_exit, true),
+%%     process_flag(trap_exit, true),
     %% connect() has to be called first, so we can use a special state here
     {ok, {TypeSup, AMQPParams}}.
 
