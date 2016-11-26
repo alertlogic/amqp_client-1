@@ -11,7 +11,7 @@
 %% The Original Code is RabbitMQ.
 %%
 %% The Initial Developer of the Original Code is GoPivotal, Inc.
-%% Copyright (c) 2007-2014 GoPivotal, Inc.  All rights reserved.
+%% Copyright (c) 2007-2016 Pivotal Software, Inc.  All rights reserved.
 %%
 
 %% @private
@@ -151,9 +151,8 @@ do_connect({Addr, Family},
                                         orddict:from_list(SslOpts0)))),
             case ssl:connect(Sock, SslOpts) of
                 {ok, SslSock} ->
-                    RabbitSslSock = #ssl_socket{ssl = SslSock, tcp = Sock},
                     try_handshake(AmqpParams, SIF,
-                                  State#state{sock = RabbitSslSock});
+                                  State#state{sock = SslSock});
                 {error, _} = E ->
                     E
             end;
@@ -304,7 +303,7 @@ client_properties(UserProperties) ->
                {<<"version">>,   longstr, list_to_binary(Vsn)},
                {<<"platform">>,  longstr, <<"Erlang">>},
                {<<"copyright">>, longstr,
-                <<"Copyright (c) 2007-2014 GoPivotal, Inc.">>},
+                <<"Copyright (c) 2007-2016 Pivotal Software, Inc.">>},
                {<<"information">>, longstr,
                 <<"Licensed under the MPL.  "
                   "See http://www.rabbitmq.com/">>},
@@ -323,6 +322,8 @@ handshake_recv(Expecting) ->
                     Method;
                 {'connection.tune', 'connection.close'} ->
                     Method;
+                {'connection.open_ok', 'connection.close'} ->
+                    exit(get_reason(Method));
                 {'connection.open_ok', _} ->
                     {closing,
                      #amqp_error{name        = command_invalid,
@@ -369,3 +370,6 @@ obtain() ->
         false -> ok;
         _     -> file_handle_cache:obtain()
     end.
+
+get_reason(#'connection.close'{reply_code = ErrCode}) ->
+    ?PROTOCOL:amqp_exception(ErrCode).

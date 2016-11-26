@@ -11,7 +11,7 @@
 %% The Original Code is RabbitMQ.
 %%
 %% The Initial Developer of the Original Code is GoPivotal, Inc.
-%% Copyright (c) 2011-2014 GoPivotal, Inc.  All rights reserved.
+%% Copyright (c) 2011-2015 Pivotal Software, Inc.  All rights reserved.
 %%
 
 %% @doc This module is an implementation of the amqp_gen_consumer
@@ -93,6 +93,9 @@ handle_deliver(M, A, DeliveryCtx, C) ->
 
 
 %% @private
+handle_info({'DOWN', _MRef, process, C, normal}, C) ->
+    %% The channel was closed.
+    {ok, C};
 handle_info({'DOWN', _MRef, process, C, Info}, C) ->
     {error, {consumer_died, Info}, C};
 handle_info({'DOWN', MRef, process, Pid, Info}, C) ->

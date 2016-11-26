@@ -11,7 +11,7 @@
 %% The Original Code is RabbitMQ.
 %%
 %% The Initial Developer of the Original Code is GoPivotal, Inc.
-%% Copyright (c) 2007-2014 GoPivotal, Inc.  All rights reserved.
+%% Copyright (c) 2007-2015 Pivotal Software, Inc.  All rights reserved.
 %%
 
 -ifndef(AMQP_CLIENT_HRL).
@@ -29,7 +29,7 @@
                               port               = undefined,
                               channel_max        = 0,
                               frame_max          = 0,
-                              heartbeat          = 0,
+                              heartbeat          = 10,
                               connection_timeout = infinity,
                               ssl_options        = none,
                               auth_mechanisms    =

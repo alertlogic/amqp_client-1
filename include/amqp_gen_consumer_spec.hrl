@@ -11,12 +11,12 @@
 %% The Original Code is RabbitMQ.
 %%
 %% The Initial Developer of the Original Code is GoPivotal, Inc.
-%% Copyright (c) 2011-2014 GoPivotal, Inc.  All rights reserved.
+%% Copyright (c) 2011-2015 Pivotal Software, Inc.  All rights reserved.
 %%
 
 -include("amqp_client.hrl").
 
--ifndef(edoc).
+-ifdef(use_specs).
 -type(state() :: any()).
 -type(consume() :: #'basic.consume'{}).
 -type(consume_ok() :: #'basic.consume_ok'{}).
